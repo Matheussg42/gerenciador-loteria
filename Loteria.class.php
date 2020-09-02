@@ -58,7 +58,11 @@ class Loteria
     }
 
     /**
-     * Class constructor.
+     * Classe construtora para receber os valores de Quantidade Dezena e Total de Jogos. 
+     * Caso nao sejam enviados a Quantidade Dezena recebera 6, e o Total de Jogos recebera 1.
+     * 
+     * @param $qttyDezenas int
+     * @param $totalJogos int
      */
     public function __construct(int $qttyDezenas = 6, int $totalJogos = 1)
     {
@@ -71,6 +75,11 @@ class Loteria
         }
     }
 
+    /**
+     * Classe privada para gerar um jogo baseado no valor de Dezenas passadas no __construct. 
+     * 
+     * @return $numeros array
+     */
     private function gerandoNumeros()
     {
         $numeros = range(01, 60);
@@ -82,6 +91,11 @@ class Loteria
         return $numeros;
     }
 
+    /**
+     * Classe publica para gerar o numero de jogos passados no Total de Jogos do __construct.
+     * Usa a funcao gerandoNumeros() para retornar os numeros de cada jogo.
+     * 
+     */
     public function gerandoJogos()
     {
         $jogosArr = array();
@@ -92,23 +106,38 @@ class Loteria
         $this->setJogos($jogosArr);
     }
 
+    /**
+     * Classe publica para gerar o jogo que e considerado o resultado.
+     */
     public function sorteio()
     {
         $this->setResultado($this->gerandoNumeros());
     }
 
+    /**
+     * Classe publica para verificar o resultado dos jogos e exibi-los na tela.
+     * Usa as funcoes geraLinhas() e geraResultado() para montar a tabela.
+     */
     public function confereSorteio()
     {
         $linhas = "";
 
         foreach ($this->getJogos() as $jogo) {
             $jogoConferido = array_intersect($jogo, $this->getResultado());
-            $linhas .= $this->geraLinhas($jogo, $jogoConferido);
+            $linhas .= (string) $this->geraLinhas($jogo, $jogoConferido);
         }
 
         return $this->geraResultado($linhas);
     }
 
+    /**
+     * Classe publica para gerar as linhas que serao exibidas na tabela.
+     * 
+     * @param $jogo array
+     * @param $jogoConferido array
+     * 
+     * @return $linha string
+     */
     private function geraLinhas(array $jogo, array $jogoConferido)
     {
         $jogoMontado = (string) implode(" - ", $jogo);
@@ -123,9 +152,16 @@ class Loteria
         </tr>
         ";
 
-        return $linha;
+        return (string) $linha;
     }
 
+    /**
+     * Classe publica para gerar a tabela com o resultado dos jogos.
+     * 
+     * @param $linhas string
+     * 
+     * @return $tabela string
+     */
     private function geraResultado(string $linhas)
     {
         $resultadoSorteio = implode(" - ", $this->getResultado());
